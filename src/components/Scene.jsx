@@ -1,16 +1,11 @@
 "use client";
-import {
-  EffectComposer,
-  Noise,
-  Vignette,
-  Bloom,
-} from "@react-three/postprocessing";
+import { EffectComposer, Noise, Bloom } from "@react-three/postprocessing";
 
 import { Canvas } from "@react-three/fiber";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import Sphere from "./Sphere";
-
+import Particles from "./Particles";
+import { OrbitControls } from "@react-three/drei";
 export default function Scene() {
   const [vertex, setVertex] = useState("");
   const [fragment, setFragment] = useState("");
@@ -35,9 +30,9 @@ export default function Scene() {
       }}
     >
       <color attach="background" args={["#141414"]} />
-        <ambientLight  intensity={1.5}/>
-      <Sphere vertex={vertex} fragment={fragment} />
-
+      <ambientLight intensity={1.5} />
+      <OrbitControls />
+      <Particles fragmentShader={fragment} vertexShader={vertex} count={4500} />
       <EffectComposer multisampling={0} disableNormalPass={true}>
         <Bloom
           luminanceThreshold={0}
@@ -45,8 +40,7 @@ export default function Scene() {
           height={500}
           opacity={1}
         />
-        <Noise opacity={0.05} />
-        <Vignette eskil={false} offset={0.1} darkness={1.1} />
+        <Noise opacity={0.03} />
       </EffectComposer>
     </Canvas>
   );

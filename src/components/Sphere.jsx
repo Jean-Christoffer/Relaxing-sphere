@@ -1,12 +1,44 @@
 "use client";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { MathUtils, Vector3 } from "three";
 import { hsvToRgb } from "../utils";
+import * as THREE from "three";
 
-const Sphere = ({ vertex, fragment }) => {
+const Sphere = ({ vertex, fragment, soundFile }) => {
   const mesh = useRef();
   const hover = useRef(false);
+  
+  let analyser = useRef(null);
+  let sound = useRef(null);
+  let audioLoader = useRef(new THREE.AudioLoader());
+
+  useEffect(() => {
+    // Set up the audio listener and sound
+    const listener = new THREE.AudioListener();
+    sound.current = new THREE.Audio(listener);
+
+    // Load the audio file and set it to play
+    audioLoader.current.load(soundFile, (buffer) => {
+      sound.current.setBuffer(buffer);
+      sound.current.setLoop(true);
+      sound.current.setVolume(0.5);
+      sound.current.play();
+      console.log(sound)
+
+      // Once the sound is ready, set up the analyser
+      analyser.current = new THREE.AudioAnalyser(sound.current, 32);
+    });
+  }, [soundFile]);
+
+  useEffect(() => {
+    if (analyser.current) {
+      // Get the average frequency and log it
+      const data = analyser.current.getAverageFrequency();
+      const avg = data / 255;
+      console.log(avg);
+    }
+  }, [analyser.current]);
 
   const uniforms = useMemo(
     () => ({
@@ -63,7 +95,7 @@ const Sphere = ({ vertex, fragment }) => {
     <mesh
       ref={mesh}
       position={[0, 0, 0]}
-      scale={1.5}
+      scale={1}
       onPointerOver={() => (hover.current = true)}
       onPointerOut={() => (hover.current = false)}
     >

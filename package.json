@@ -14,6 +14,7 @@
     "@react-three/postprocessing": "^2.16.3",
     "@types/three": "^0.169.0",
     "axios": "^1.7.7",
+    "glsl-rotate": "^2.0.1",
     "next": "14.2.14",
     "react": "^18",
     "react-dom": "^18",

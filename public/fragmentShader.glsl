@@ -1,35 +1,30 @@
-uniform float u_intensity;
-uniform float u_time;
-uniform vec3 u_lightDirection;
-uniform vec3 u_lightColor;
-uniform float u_lightIntensity;
+varying float vDistance;
+uniform vec3 uColor; // Updated to vec3 for full RGB color control
 
-varying vec2 vUv;
-varying float vDisplacement;
+vec3 hsv2rgb(vec3 c) {
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
 
 void main() {
+    // Update hue with uColor.x, saturation with uColor.y, value dynamically
+    float hue = uColor.x;
+    float saturation = 0.7 + 0.3 * uColor.y; // Add some variation to saturation
+    float value = 1.0; // Max brightness
 
-  vec3 baseColor = vec3(0.02, 0.02, 0.02);
+    // Convert HSV to RGB
+    vec3 color = hsv2rgb(vec3(hue, saturation, value));
 
-  vec3 normal = normalize(vec3(0.0, 0.0, 1.0));
+    // Calculate strength based on distance from point center
+    float strength = distance(gl_PointCoord, vec2(0.5));
+    strength = 1.0 - strength;
+    strength = pow(strength, 3.0);
 
-  vec3 ambient = 0.1 * baseColor;
+    // Apply additional blending based on distance for more depth
+    color = mix(color, vec3(0.97, 0.70, 0.45), vDistance * 0.2);
+    color = mix(vec3(0.0), color, strength);
 
-  vec3 lightDir = normalize(u_lightDirection);
-  float diff = max(dot(normal, lightDir), 0.0);
-  vec3 diffuse = diff * u_lightColor * u_lightIntensity * baseColor;
-
-  vec3 viewDirection = normalize(vec3(0.0, 0.0, 1.0));
-  vec3 reflectDir = reflect(-lightDir, normal);
-  float shininess = 8.0;
-  float specularStrength = 1.5;
-  float spec = pow(max(dot(viewDirection, reflectDir), 0.0), shininess);
-  vec3 specular = specularStrength * spec * u_lightColor * u_lightIntensity;
-
-  vec3 lighting = ambient + diffuse + specular;
-
-  float distort = 2.0 * vDisplacement * u_intensity;
-  vec3 color = lighting * (1.0 - distort);
-
-  gl_FragColor = vec4(color, 1.0);
+    // Set the final fragment color
+    gl_FragColor = vec4(color, strength);
 }
