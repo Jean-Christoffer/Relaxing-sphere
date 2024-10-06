@@ -1,11 +1,11 @@
 "use client";
-import { EffectComposer, Noise, Bloom } from "@react-three/postprocessing";
-
+import { EffectComposer, Noise } from "@react-three/postprocessing";
+import Nav from "./Nav";
 import { Canvas } from "@react-three/fiber";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Particles from "./Particles";
-import { OrbitControls } from "@react-three/drei";
+
 export default function Scene() {
   const [vertex, setVertex] = useState("");
   const [fragment, setFragment] = useState("");
@@ -20,7 +20,7 @@ export default function Scene() {
   return (
     <Canvas
       colorManagement
-      camera={{ position: [0, 0, 7] }}
+      camera={{ position: [0, 0, 5] }}
       gl={{
         powerPreference: "high-performance",
         alpha: false,
@@ -30,17 +30,11 @@ export default function Scene() {
       }}
     >
       <color attach="background" args={["#141414"]} />
-      <ambientLight intensity={1.5} />
-      <OrbitControls />
+
+      <Nav />
       <Particles fragmentShader={fragment} vertexShader={vertex} count={4500} />
       <EffectComposer multisampling={0} disableNormalPass={true}>
-        <Bloom
-          luminanceThreshold={0}
-          luminanceSmoothing={0.9}
-          height={500}
-          opacity={1}
-        />
-        <Noise opacity={0.03} />
+        <Noise opacity={0.05} />
       </EffectComposer>
     </Canvas>
   );

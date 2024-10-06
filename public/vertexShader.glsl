@@ -11,6 +11,8 @@ mat3 rotation3dY(float angle) {
     float c = cos(angle);
     return mat3(c, 0.0, -s, 0.0, 1.0, 0.0, s, 0.0, c);
 }
+//END
+
 // Classic Perlin 3D Noise 
 // by Stefan Gustavson
 //
@@ -98,9 +100,8 @@ float cnoise(vec3 P) {
 
 void main() {
     float distanceFactor = pow(uRadius - distance(position, vec3(0.0)), 1.5);
-    float size = distanceFactor * 5.0 + 5.0;
+    float size = distanceFactor * 10.0 + 10.0;
 
-    // Add noise-based displacement to particle position
     vec3 noisePosition = position;
     noisePosition.x += cnoise(vec3(position.x * 0.5, position.y * 0.5, uTime * 0.1)) * uIntensity;
     noisePosition.y += cnoise(vec3(position.y * 0.5, position.x * 0.5, uTime * 0.1)) * uIntensityY;
@@ -118,6 +119,6 @@ void main() {
     gl_Position = projectedPosition;
 
     gl_PointSize = size;
-    // Size attenuation;
+
     gl_PointSize *= (1.0 / -viewPosition.z);
 }

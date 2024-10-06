@@ -4,7 +4,7 @@ import * as THREE from "three";
 export default function Particles({ vertexShader, fragmentShader, count }) {
   const points = useRef();
 
-  const radius = 1.5;
+  const radius = 1;
 
   const particlesPosition = useMemo(() => {
     const positions = new Float32Array(count * 3);
@@ -85,14 +85,14 @@ export default function Particles({ vertexShader, fragmentShader, count }) {
 
     uniforms.uIntensity.value = THREE.MathUtils.damp(
       uniforms.uIntensity.value,
-      pointer.x * 10,
+      pointer.x * 4,
       1.0,
       delta
     );
 
     uniforms.uIntensityY.value = THREE.MathUtils.damp(
       uniforms.uIntensityY.value,
-      pointer.y * 5,
+      pointer.y * 4,
       1.0,
       delta
     );
