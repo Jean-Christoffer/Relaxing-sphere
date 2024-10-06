@@ -1,7 +1,8 @@
 "use client";
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { MathUtils } from "three";
+import { MathUtils, Vector3 } from "three";
+import { hsvToRgb } from "../utils";
 
 const Sphere = ({ vertex, fragment }) => {
   const mesh = useRef();
@@ -15,12 +16,17 @@ const Sphere = ({ vertex, fragment }) => {
       u_time: {
         value: 0.0,
       },
+      u_lightDirection: { value: new Vector3(1.0, 1.0, 0.75).normalize() },
+      u_lightColor: { value: new Vector3(1.0, 1.0, 1.0) },
+      u_lightIntensity: { value: 1.0 },
     }),
     []
   );
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     const { clock, pointer } = state;
+    const elapsedTime = clock.getElapsedTime();
+
     mesh.current.material.uniforms.u_time.value = 0.4 * clock.getElapsedTime();
 
     mesh.current.material.uniforms.u_intensity.value = MathUtils.lerp(
@@ -39,6 +45,18 @@ const Sphere = ({ vertex, fragment }) => {
       pointer.x * Math.PI,
       0.003
     );
+
+    const hue = (elapsedTime * 0.1) % 1.0;
+    const saturation = 0.8;
+    const value = 1.0;
+
+    const rgbColor = hsvToRgb(hue, saturation, value);
+    uniforms.u_lightColor.value.set(
+      MathUtils.damp(uniforms.u_lightColor.value.x, rgbColor.x, 5.0, delta),
+      MathUtils.damp(uniforms.u_lightColor.value.y, rgbColor.y, 5.0, delta),
+      MathUtils.damp(uniforms.u_lightColor.value.z, rgbColor.z, 5.0, delta)
+    );
+    uniforms.u_time.value = 0.4 * elapsedTime;
   });
 
   return (
