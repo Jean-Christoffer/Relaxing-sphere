@@ -1,6 +1,6 @@
 "use client";
 import { EffectComposer, Noise } from "@react-three/postprocessing";
-import Nav from "./Nav";
+
 import { Canvas } from "@react-three/fiber";
 import axios from "axios";
 import { useState, useEffect } from "react";
@@ -31,10 +31,10 @@ export default function Scene() {
     >
       <color attach="background" args={["#141414"]} />
 
-      <Nav />
+
       <Particles fragmentShader={fragment} vertexShader={vertex} count={4500} />
       <EffectComposer multisampling={0} disableNormalPass={true}>
-        <Noise opacity={0.05} />
+        <Noise opacity={0.03} />
       </EffectComposer>
     </Canvas>
   );

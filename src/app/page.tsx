@@ -2,11 +2,8 @@ import Scene from "@/components/Scene";
 
 export default function Home() {
   return (
-    <div>
-      <main className="h-screen relative">
-
-        <Scene />
-      </main>
-    </div>
+    <main className="h-full">
+      <Scene />
+    </main>
   );
 }
