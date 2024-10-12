@@ -36,7 +36,7 @@ body {
   padding: 32px;
   transform: translate3d(0, 0, 0) scale(1) !important;
   transform-origin: 0px 0px;
-  z-index: 16695054;
+  z-index: 5 !important;
 }
 svg {
   width: 24px;
