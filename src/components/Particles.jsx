@@ -1,8 +1,31 @@
-import { useRef, useMemo, useEffect } from "react";
+"use client";
+import { useRef, useMemo, useEffect, useState } from "react";
 import { useFrame } from "@react-three/fiber";
+import { PositionalAudio, Html } from "@react-three/drei";
+import { PauseIcon, PlayIcon } from "@radix-ui/react-icons";
 import * as THREE from "three";
+
 export default function Particles({ vertexShader, fragmentShader, count }) {
   const points = useRef();
+  const [play, setPlay] = useState(false);
+
+  const analyzer = useRef();
+  const sound = useRef(null);
+
+  const playMusic = () => {
+    if (play) {
+      sound?.current?.pause();
+    } else {
+      sound?.current?.play();
+    }
+    setPlay(!play);
+  };
+
+  useEffect(() => {
+    if (sound.current) {
+      analyzer.current = new THREE.AudioAnalyser(sound.current, 128);
+    }
+  }, [sound]);
 
   const radius = 1;
 
@@ -20,7 +43,6 @@ export default function Particles({ vertexShader, fragmentShader, count }) {
 
       positions.set([x, y, z], i * 3);
     }
-    console.log(positions);
     return positions;
   }, [count]);
 
@@ -82,20 +104,28 @@ export default function Particles({ vertexShader, fragmentShader, count }) {
       1,
       delta
     );
+    if (analyzer.current && analyzer.current.data) {
+      let freq = analyzer.current.getAverageFrequency() / 5;
+      let mouseX = pointer.x * 4;
+      let mouseY = pointer.y * 4;
 
-    uniforms.uIntensity.value = THREE.MathUtils.damp(
-      uniforms.uIntensity.value,
-      pointer.x * 4,
-      1.0,
-      delta
-    );
+      let resX = play ? freq / 2 : mouseX;
+      let resY = play ? freq / 2.5 : mouseY;
 
-    uniforms.uIntensityY.value = THREE.MathUtils.damp(
-      uniforms.uIntensityY.value,
-      pointer.y * 4,
-      1.0,
-      delta
-    );
+      uniforms.uIntensity.value = THREE.MathUtils.damp(
+        uniforms.uIntensity.value,
+        resX,
+        1.0,
+        delta
+      );
+
+      uniforms.uIntensityY.value = THREE.MathUtils.damp(
+        uniforms.uIntensityY.value,
+        resY,
+        1.0,
+        delta
+      );
+    }
 
     points.current.material.uniforms.uTime.value = uniforms.uTime.value;
     points.current.material.uniforms.uColor.value = uniforms.uColor.value;
@@ -106,22 +136,36 @@ export default function Particles({ vertexShader, fragmentShader, count }) {
   });
 
   return (
-    <points ref={points}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={particlesPosition.length / 3}
-          array={particlesPosition}
-          itemSize={3}
+    <>
+      <Html as="div" wrapperClass="button-div">
+        <button onClick={playMusic}>
+          {play ? <PauseIcon /> : <PlayIcon />}
+        </button>
+      </Html>
+      <points ref={points}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            count={particlesPosition.length / 3}
+            array={particlesPosition}
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <shaderMaterial
+          depthWrite={false}
+          fragmentShader={fragmentShader}
+          vertexShader={vertexShader}
+          uniforms={uniforms}
+          blending={THREE.AdditiveBlending}
         />
-      </bufferGeometry>
-      <shaderMaterial
-        depthWrite={false}
-        fragmentShader={fragmentShader}
-        vertexShader={vertexShader}
-        uniforms={uniforms}
-        blending={THREE.AdditiveBlending}
+      </points>
+      <PositionalAudio
+        url="/MANTRA.mp3"
+        distance={10}
+        loop
+        ref={sound}
+        autoplay={false}
       />
-    </points>
+    </>
   );
 }

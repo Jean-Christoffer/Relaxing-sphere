@@ -25,3 +25,18 @@ body {
     text-wrap: balance;
   }
 }
+.button-div {
+  position: fixed !important;
+  display: flex !important;
+  margin-right: 16px !important;
+  width: 100%;
+  justify-content: end;
+  padding: 1.5rem;
+  transform: translate3d(0, 0, 0) scale(1) !important;
+  transform-origin: 0px 0px;
+  z-index: 16695054;
+}
+svg {
+  width: 24px;
+  height: 24px;
+}
