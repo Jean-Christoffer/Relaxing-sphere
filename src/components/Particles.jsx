@@ -17,13 +17,13 @@ export default function Particles({ vertexShader, fragmentShader, count }) {
       sound?.current?.pause();
     } else {
       sound?.current?.play();
+      sound?.current?.setVolume(0.3);
     }
     setPlay(!play);
   };
 
   useEffect(() => {
     if (sound.current) {
-      sound.current.setVolume(0.5);
       analyzer.current = new THREE.AudioAnalyser(sound.current, 128);
     }
   }, [sound]);
@@ -75,21 +75,18 @@ export default function Particles({ vertexShader, fragmentShader, count }) {
   );
 
   useEffect(() => {
-    // Update the target color every 10 seconds
     const interval = setInterval(() => {
       targetColor.set(Math.random(), Math.random(), 1.0).normalize();
     }, 20000);
 
-    return () => clearInterval(interval); // Cleanup interval on component unmount
+    return () => clearInterval(interval);
   }, [targetColor]);
 
   useFrame((state, delta) => {
     const { clock, pointer } = state;
 
-    // Update time uniform
     uniforms.uTime.value = clock.elapsedTime;
 
-    // Smoothly damp towards the target color
     uniforms.uColor.value.x = THREE.MathUtils.damp(
       uniforms.uColor.value.x,
       targetColor.x,
