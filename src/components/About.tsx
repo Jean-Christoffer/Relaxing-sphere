@@ -15,6 +15,9 @@ export default function About({ show, handleCLick }: AboutProps) {
   useGSAP(() => {
     if (container.current && show) {
       const elements = container.current.querySelectorAll(".staggerNation");
+      gsap.to(container.current, {
+        zIndex: 20,
+      });
       gsap.fromTo(
         elements,
         { opacity: 0, x: -10 },
@@ -35,6 +38,9 @@ export default function About({ show, handleCLick }: AboutProps) {
         stagger: 0.1,
         duration: 0.4,
         userSelect: "none",
+      });
+      gsap.to(container.current, {
+        zIndex: 0,
       });
     }
   }, [show]);
