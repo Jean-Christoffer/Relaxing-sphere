@@ -34,6 +34,7 @@ export default function About({ show, handleCLick }: AboutProps) {
         x: -10,
         stagger: 0.1,
         duration: 0.4,
+        userSelect: "none",
       });
     }
   }, [show]);
@@ -43,7 +44,11 @@ export default function About({ show, handleCLick }: AboutProps) {
       className="absolute top-[50%] translate-y-[-50%] z-20  flex flex-col gap-2 custom"
       ref={container}
     >
-      <button className="staggerNation opacity-0" onClick={handleCLick}>
+      <button
+        className="staggerNation opacity-0"
+        onClick={handleCLick}
+        disabled={!show}
+      >
         <Cross1Icon />
       </button>
 
