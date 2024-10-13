@@ -23,6 +23,7 @@ export default function Particles({ vertexShader, fragmentShader, count }) {
 
   useEffect(() => {
     if (sound.current) {
+      sound.current.setVolume(0.5);
       analyzer.current = new THREE.AudioAnalyser(sound.current, 128);
     }
   }, [sound]);
@@ -34,6 +35,7 @@ export default function Particles({ vertexShader, fragmentShader, count }) {
 
     for (let i = 0; i < count; i++) {
       const distance = Math.sqrt(Math.random()) * radius;
+
       const theta = THREE.MathUtils.randFloatSpread(360);
       const phi = THREE.MathUtils.randFloatSpread(360);
 
@@ -66,6 +68,12 @@ export default function Particles({ vertexShader, fragmentShader, count }) {
     }),
     []
   );
+
+  const targetColor = useMemo(
+    () => new THREE.Vector3(Math.random(), Math.random(), 1.0),
+    []
+  );
+
   useEffect(() => {
     // Update the target color every 10 seconds
     const interval = setInterval(() => {
@@ -73,12 +81,8 @@ export default function Particles({ vertexShader, fragmentShader, count }) {
     }, 20000);
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, []);
+  }, [targetColor]);
 
-  const targetColor = useMemo(
-    () => new THREE.Vector3(Math.random(), Math.random(), 1.0),
-    []
-  );
   useFrame((state, delta) => {
     const { clock, pointer } = state;
 
@@ -142,6 +146,7 @@ export default function Particles({ vertexShader, fragmentShader, count }) {
           {play ? <PauseIcon /> : <PlayIcon />}
         </button>
       </Html>
+
       <points ref={points}>
         <bufferGeometry>
           <bufferAttribute

@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Oswald:wght@200..700&display=swap");
 
 :root {
   --background: #ffffff;
@@ -17,7 +18,7 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", sans-serif;
   padding: 16px;
   background-color: #141414;
 }
@@ -38,7 +39,33 @@ body {
   transform-origin: 0px 0px;
   z-index: 5 !important;
 }
+header,
+h2 {
+  font-family: "Oswald", sans-serif;
+}
 svg {
   width: 24px;
   height: 24px;
+}
+.custom {
+  width: calc(100% - 32px);
+}
+@media (max-width: 768px) {
+  .custom {
+    width: calc(100% - 32px);
+    text-shadow: #141414 1px 0 10px;
+  }
+}
+
+.staggerNation svg {
+  width: 16px;
+  height: 16px;
+}
+.staggerNation {
+  width: fit-content;
+}
+@media (max-width: 768px) {
+  .staggerNation {
+    width: calc(100% - 32px);
+  }
 }

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.1",
     "@radix-ui/react-icons": "^1.3.0",
     "@react-three/drei": "^9.114.0",
     "@react-three/fiber": "^8.17.9",
@@ -16,6 +17,7 @@
     "@types/three": "^0.169.0",
     "axios": "^1.7.7",
     "glsl-rotate": "^2.0.1",
+    "gsap": "^3.12.5",
     "next": "14.2.14",
     "react": "^18",
     "react-dom": "^18",
