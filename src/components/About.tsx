@@ -54,7 +54,7 @@ export default function About({ show, handleCLick }: AboutProps) {
         I used to be a social worker, but now I work as a web developer with a
         passion for frontend development.
       </p>
-      <p className="staggerNation">
+      <p className="staggerNation opacity-0">
         You can find some of my work{" "}
         <Link
           href="https://www.github.com/Jean-Christoffer"
@@ -66,7 +66,7 @@ export default function About({ show, handleCLick }: AboutProps) {
           </em>
         </Link>
       </p>
-      <p className="staggerNation">
+      <p className="staggerNation opacity-0">
         Feel free to{" "}
         <Link
           href="https://www.linkedin.com/in/jean-christoffer-d-7b7552260"
