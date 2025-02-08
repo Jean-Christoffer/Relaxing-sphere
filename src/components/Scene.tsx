@@ -14,7 +14,6 @@ export default function Scene() {
     const { progress } = useProgress();
     return <Html center>{progress} % loaded</Html>;
   }
-
   useEffect(() => {
     axios.get("/vertexShader.glsl").then((res) => setVertex(res.data));
     axios.get("/fragmentShader.glsl").then((res) => setFragment(res.data));
@@ -25,6 +24,7 @@ export default function Scene() {
   return (
     <Canvas
       camera={{ position: [0, 0, 5] }}
+      style={{ position: "relative" }}
       gl={{
         powerPreference: "high-performance",
         alpha: false,
