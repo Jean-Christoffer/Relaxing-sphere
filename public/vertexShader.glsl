@@ -5,7 +5,7 @@ uniform float uIntensityY;
 
 varying float vDistance;
 
-// Source: https://github.com/dmnsgn/glsl-rotate/blob/main/rotation-3d-y.glsl.js
+//Credits: => Source: https://github.com/dmnsgn/glsl-rotate/blob/main/rotation-3d-y.glsl.js
 mat3 rotation3dY(float angle) {
     float s = sin(angle);
     float c = cos(angle);
@@ -13,7 +13,7 @@ mat3 rotation3dY(float angle) {
 }
 //END
 
-// Classic Perlin 3D Noise 
+// Credits => Classic Perlin 3D Noise 
 // by Stefan Gustavson
 //
 vec4 permute(vec4 x) {
@@ -105,7 +105,6 @@ void main() {
     vec3 noisePosition = position;
     noisePosition.x += cnoise(vec3(position.x * 0.5, position.y * 0.5, uTime * 0.1)) * uIntensity;
     noisePosition.y += cnoise(vec3(position.y * 0.5, position.x * 0.5, uTime * 0.1)) * uIntensityY;
-    //noisePosition.z += cnoise(vec3(position.z * 0.5, position.z * 0.5, uTime * 0.1)) * 0.0001;
 
     vec3 particlePosition = noisePosition * rotation3dY(uTime * 0.5 * distanceFactor);
 
